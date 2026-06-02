@@ -5,6 +5,7 @@ type Subscription struct {
 	Price       int64  `json:"price" db:"price"`
 	UUID        string `json:"user_id" db:"user_id"`
 	StartDate   string `json:"start_date" db:"start_date"`
+	EndDate     string `json:"end_date" db:"end_date"`
 }
 
 type CreateSubscriptionInput struct {
@@ -12,6 +13,7 @@ type CreateSubscriptionInput struct {
 	Price       int64  `json:"price"`
 	UUID        string `json:"user_id"`
 	StartDate   string `json:"start_date"`
+	EndDate     string `json:"end_date"`
 }
 
 type UpdateSubscriptionInput struct {
@@ -19,4 +21,5 @@ type UpdateSubscriptionInput struct {
 	Price       *int64  `json:"price"`
 	UUID        *string `json:"user_id"`
 	StartDate   *string `json:"start_date"`
+	EndDate     *string `json:"end_date"`
 }
