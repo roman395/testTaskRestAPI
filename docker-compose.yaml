@@ -1,0 +1,45 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: subscription_postgres
+    environment:
+      - POSTGRES_DB=subscriptiondb
+      - POSTGRES_USER=subscriptionuser
+      - POSTGRES_PASSWORD=subscriptionpass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./migrations/001_init.up.sql:/docker-entrypoint-initdb.d/001_init.up.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U subscriptionuser -d subscriptiondb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - subscription_network
+
+#  app:
+#    build: .
+#    container_name: subscription_app
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      postgres:
+#        condition: service_healthy
+#    environment:
+#      - DB_HOST=postgres
+#      - DB_PORT=5432
+#      - DB_USER=subscriptionuser
+#      - DB_PASSWORD=subscriptionpass
+#      - DB_NAME=subscriptiondb
+#      - DB_SSLMODE=disable
+#    networks:
+#      - subscription_network
+
+networks:
+  subscription_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
