@@ -13,6 +13,8 @@ func Connect(databaseURL string) (*sqlx.DB, error) {
 
 	db.SetMaxOpenConns(20)
 	db.SetMaxIdleConns(5)
-
+	if err := RunMigrations(db.DB); err != nil {
+		return nil, err
+	}
 	return db, nil
 }
