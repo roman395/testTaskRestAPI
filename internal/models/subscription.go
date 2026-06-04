@@ -9,11 +9,11 @@ type Subscription struct {
 }
 
 type CreateSubscriptionInput struct {
-	ServiceName string `json:"service_name"`
-	Price       int64  `json:"price"`
-	UUID        string `json:"user_id"`
-	StartDate   string `json:"start_date"`
-	EndDate     string `json:"end_date"`
+	ServiceName string  `json:"service_name"`
+	Price       int64   `json:"price"`
+	UUID        string  `json:"user_id"`
+	StartDate   string  `json:"start_date"`
+	EndDate     *string `json:"end_date"`
 }
 
 type UpdateSubscriptionInput struct {
