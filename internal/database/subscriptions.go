@@ -115,12 +115,12 @@ func (s *SubscriptionStore) Update(id int, input models.UpdateSubscriptionInput)
 		sub.StartDate = *input.StartDate
 	}
 	if input.EndDate != nil {
-		if sub.EndDate == "" {
+		if *sub.EndDate == "" {
 			log.Printf("[SubscriptionStore.Update] Setting end_date from NULL to '%s'", *input.EndDate)
 		} else {
-			log.Printf("[SubscriptionStore.Update] Changing end_date from '%s' to '%s'", sub.EndDate, *input.EndDate)
+			log.Printf("[SubscriptionStore.Update] Changing end_date from '%s' to '%s'", *sub.EndDate, *input.EndDate)
 		}
-		sub.EndDate = *input.EndDate
+		sub.EndDate = input.EndDate
 	}
 
 	query := `

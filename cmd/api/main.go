@@ -12,6 +12,28 @@ import (
 	"github.com/go-chi/chi/middleware"
 )
 
+// @title Subscription Service API
+// @version 1.0
+// @description API service for managing user subscriptions
+// @description Features:
+// @description - CRUD operations for subscriptions
+// @description - Calculate total spent on subscriptions for a period
+// @description - Filter by user_id and service_name
+// @termsOfService http://swagger.io/terms/
+
+// @contact.name API Support
+// @contact.email support@subscription-service.com
+
+// @license.name MIT
+// @license.url https://opensource.org/licenses/MIT
+
+// @host localhost:8080
+// @BasePath /
+
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
+// @description Type "Bearer" followed by a space and JWT token.
 func main() {
 	log.Println("Starting Subscription Service")
 	log.Println("Version: 1.0.0")

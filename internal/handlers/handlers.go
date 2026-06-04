@@ -31,6 +31,14 @@ func respondWithError(w http.ResponseWriter, statusCode int, message string) {
 	respondWithJSON(w, statusCode, map[string]string{"error": message})
 }
 
+// GetAllSubscriptions godoc
+// @Summary Get all subscriptions
+// @Description Retrieve all subscriptions ordered by start date descending
+// @Tags subscriptions
+// @Produce json
+// @Success 200 {array} models.Subscription
+// @Failure 500 {object} map[string]string
+// @Router /subscriptions [get]
 func (h *Handlers) GetAllSubscriptions(w http.ResponseWriter, r *http.Request) {
 	log.Printf("[Handlers.GetAllSubscriptions] Request from %s", r.RemoteAddr)
 	start := time.Now()
@@ -46,6 +54,17 @@ func (h *Handlers) GetAllSubscriptions(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusOK, subs)
 }
 
+// GetSubscriptionByID godoc
+// @Summary Get subscription by ID
+// @Description Retrieve a single subscription by its ID
+// @Tags subscriptions
+// @Produce json
+// @Param id path int true "Subscription ID"
+// @Success 200 {object} models.Subscription
+// @Failure 400 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /subscriptions/{id} [get]
 func (h *Handlers) GetSubscriptionByID(w http.ResponseWriter, r *http.Request) {
 	log.Printf("[Handlers.GetSubscriptionByID] Request from %s", r.RemoteAddr)
 	start := time.Now()
@@ -78,6 +97,17 @@ func (h *Handlers) GetSubscriptionByID(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusOK, sub)
 }
 
+// CreateSubscription godoc
+// @Summary Create a new subscription
+// @Description Add a new subscription to the database
+// @Tags subscriptions
+// @Accept json
+// @Produce json
+// @Param subscription body models.CreateSubscriptionInput true "Subscription data"
+// @Success 201 {object} models.Subscription
+// @Failure 400 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /subscriptions [post]
 func (h *Handlers) CreateSubscription(w http.ResponseWriter, r *http.Request) {
 	log.Printf("[Handlers.CreateSubscription] Request from %s", r.RemoteAddr)
 	start := time.Now()
@@ -140,6 +170,19 @@ func (h *Handlers) CreateSubscription(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusCreated, sub)
 }
 
+// UpdateSubscription godoc
+// @Summary Update a subscription
+// @Description Update an existing subscription by ID
+// @Tags subscriptions
+// @Accept json
+// @Produce json
+// @Param id path int true "Subscription ID"
+// @Param subscription body models.UpdateSubscriptionInput true "Subscription data to update"
+// @Success 200 {object} models.Subscription
+// @Failure 400 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /subscriptions/{id} [put]
 func (h *Handlers) UpdateSubscription(w http.ResponseWriter, r *http.Request) {
 	log.Printf("[Handlers.UpdateSubscription] Request from %s", r.RemoteAddr)
 	start := time.Now()
@@ -233,6 +276,17 @@ func (h *Handlers) UpdateSubscription(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusOK, sub)
 }
 
+// DeleteSubscription godoc
+// @Summary Delete a subscription
+// @Description Remove a subscription from the database by ID
+// @Tags subscriptions
+// @Produce json
+// @Param id path int true "Subscription ID"
+// @Success 200 {object} map[string]string
+// @Failure 400 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /subscriptions/{id} [delete]
 func (h *Handlers) DeleteSubscription(w http.ResponseWriter, r *http.Request) {
 	log.Printf("[Handlers.DeleteSubscription] Request from %s", r.RemoteAddr)
 	start := time.Now()
@@ -265,6 +319,19 @@ func (h *Handlers) DeleteSubscription(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusOK, map[string]string{"result": "success"})
 }
 
+// GetTotalSpent godoc
+// @Summary Calculate total spent on subscriptions
+// @Description Get total money spent on subscriptions for a specific period with filtering by user_id and service_name
+// @Tags summary
+// @Produce json
+// @Param user_id query string true "User ID (UUID format)"
+// @Param service_name query string true "Service name"
+// @Param start_date query string true "Start date in MM-YYYY format"
+// @Param end_date query string true "End date in MM-YYYY format"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /subscriptions/summary [get]
 func (h *Handlers) GetTotalSpent(w http.ResponseWriter, r *http.Request) {
 	log.Printf("[Handlers.GetTotalSpent] Request from %s", r.RemoteAddr)
 	start := time.Now()
@@ -332,6 +399,7 @@ func (h *Handlers) GetTotalSpent(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusOK, response)
 }
 
+// isValidMonthYear validates date in MM-YYYY format
 func isValidMonthYear(date string) bool {
 	if len(date) != 7 {
 		return false
