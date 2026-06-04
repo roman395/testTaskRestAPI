@@ -1,34 +1,38 @@
 package database
 
 import (
+	"api/config"
 	"log"
-	"time"
 
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 )
 
-func Connect(databaseURL string) (*sqlx.DB, error) {
-	log.Println("Initializing database connection...")
+func Connect(cfg *config.Config) (*sqlx.DB, error) {
+	log.Println("[DATABASE] Connecting to database...")
+	log.Printf("[DATABASE] Host: %s, Port: %d, Database: %s",
+		cfg.Database.Host, cfg.Database.Port, cfg.Database.Name)
 
-	db, err := sqlx.Connect("postgres", databaseURL)
+	db, err := sqlx.Connect("postgres", cfg.DatabaseURL())
 	if err != nil {
-		log.Printf("Failed to connect to database: %v", err)
+		log.Printf("[DATABASE] Connection failed: %v", err)
 		return nil, err
 	}
 
-	db.SetMaxOpenConns(25)
-	db.SetMaxIdleConns(5)
-	db.SetConnMaxLifetime(5 * time.Minute)
+	// Configure connection pool
+	db.SetMaxOpenConns(cfg.Database.MaxOpenConns)
+	db.SetMaxIdleConns(cfg.Database.MaxIdleConns)
+	db.SetConnMaxLifetime(cfg.ConnMaxLifetime())
 
-	log.Println("✅ Database connection established successfully")
+	log.Printf("[DATABASE] Connection pool configured: max_open=%d, max_idle=%d, max_lifetime=%v",
+		cfg.Database.MaxOpenConns, cfg.Database.MaxIdleConns, cfg.ConnMaxLifetime())
 
+	// Test connection
 	if err := db.Ping(); err != nil {
-		log.Printf("Database ping failed: %v", err)
+		log.Printf("[DATABASE] Ping failed: %v", err)
 		return nil, err
 	}
 
-	log.Println("Database ping successful")
-
+	log.Println("[DATABASE] Connection established successfully")
 	return db, nil
 }

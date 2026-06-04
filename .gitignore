@@ -1,0 +1,17 @@
+# Environment files
+.env
+.env.local
+.env.production
+
+# Config files with secrets (if any)
+config.local.yaml
+
+# Binary
+subscription-service
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
